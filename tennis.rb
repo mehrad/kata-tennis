@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require '../player.rb'
-
-class TennisGame1
+class TennisGame
   def initialize(player_one_name, player_two_name)
     @player_one = Player.new(player_one_name)
     @player_two = Player.new(player_two_name)
@@ -15,7 +14,9 @@ class TennisGame1
       @player_two.won_point
     end
   end
+end
 
+class TennisGame1 < TennisGame
   def score
     result = ''
     temp_score = 0
@@ -56,20 +57,7 @@ class TennisGame1
   end
 end
 
-class TennisGame2
-  def initialize(player_one_name, player_two_name)
-    @player_one = Player.new(player_one_name)
-    @player_two = Player.new(player_two_name)
-  end
-
-  def won_point(player_name)
-    if player_name == @player_one.name
-      @player_one.won_point
-    else
-      @player_two.won_point
-    end
-  end
-
+class TennisGame2 < TennisGame
   def score
     result = ''
     if (@player_one.points == @player_two.points) && (@player_one.points < 3)
@@ -124,20 +112,7 @@ class TennisGame2
   end
 end
 
-class TennisGame3
-  def initialize(player_one_name, player_two_name)
-    @player_one = Player.new(player_one_name)
-    @player_two = Player.new(player_two_name)
-  end
-
-  def won_point(n)
-    if n == @player_one.name
-      @player_one.won_point
-    else
-      @player_two.won_point
-    end
-  end
-
+class TennisGame3 < TennisGame
   def score
     if ((@player_one.points < 4) && (@player_two.points < 4)) && (@player_one.points + @player_two.points < 6)
       p = %w[Love Fifteen Thirty Forty]
