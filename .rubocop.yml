@@ -1,0 +1,4 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'test/tennis_test.rb'
