@@ -20,12 +20,11 @@ class TennisGame1 < TennisGame
   def score
     result = ''
     temp_score = 0
-    if @player_one.points == @player_two.points
-      result = {
-        0 => 'Love-All',
-        1 => 'Fifteen-All',
-        2 => 'Thirty-All'
-      }.fetch(@player_one.points, 'Deuce')
+    if @player_one.points == @player_two.points && [3, 4].include?(@player_two.points)
+      result = 'Deuce'
+    elsif @player_one.points == @player_two.points
+      result = @player_one.results_text
+      result += '-All'
     elsif (@player_one.points >= 4) || (@player_two.points >= 4)
       minus_result = @player_one.points - @player_two.points
       result = if minus_result == 1
@@ -38,22 +37,8 @@ class TennisGame1 < TennisGame
                  'Win for player2'
                end
     else
-      (1...3).each do |i|
-        if i == 1
-          temp_score = @player_one.points
-        else
-          result += '-'
-          temp_score = @player_two.points
-        end
-        result += {
-          0 => 'Love',
-          1 => 'Fifteen',
-          2 => 'Thirty',
-          3 => 'Forty'
-        }[temp_score]
-      end
-    end
-    result
+      @player_one.results_text + "-" + @player_two.results_text
+    end 
   end
 end
 
@@ -61,9 +46,7 @@ class TennisGame2 < TennisGame
   def score
     result = ''
     if (@player_one.points == @player_two.points) && (@player_one.points < 3)
-      result = 'Love' if @player_one.points.zero?
-      result = 'Fifteen' if @player_one.points == 1
-      result = 'Thirty' if @player_one.points == 2
+      result = @player_one.results_text
       result += '-All'
     end
     result = 'Deuce' if (@player_one.points == @player_two.points) && (@player_one.points > 2)
@@ -71,33 +54,25 @@ class TennisGame2 < TennisGame
     p1res = ''
     p2res = ''
     if @player_one.points.positive? && @player_two.points.zero?
-      p1res = 'Fifteen' if @player_one.points == 1
-      p1res = 'Thirty' if @player_one.points == 2
-      p1res = 'Forty' if @player_one.points == 3
+      p1res = @player_one.results_text
       p2res = 'Love'
       result = "#{p1res}-#{p2res}"
     end
     if @player_two.points.positive? && @player_one.points.zero?
-      p2res = 'Fifteen' if @player_two.points == 1
-      p2res = 'Thirty' if @player_two.points == 2
-      p2res = 'Forty' if @player_two.points == 3
+      p2res = @player_two.results_text
 
       p1res = 'Love'
       result = "#{p1res}-#{p2res}"
     end
 
     if (@player_one.points > @player_two.points) && (@player_one.points < 4)
-      p1res = 'Thirty' if @player_one.points == 2
-      p1res = 'Forty' if @player_one.points == 3
-      p2res = 'Fifteen' if @player_two.points == 1
-      p2res = 'Thirty' if @player_two.points == 2
+      p1res = @player_one.results_text
+      p2res = @player_two.results_text
       result = "#{p1res}-#{p2res}"
     end
     if (@player_two.points > @player_one.points) && (@player_two.points < 4)
-      p2res = 'Thirty' if @player_two.points == 2
-      p2res = 'Forty' if @player_two.points == 3
-      p1res = 'Fifteen' if @player_one.points == 1
-      p1res = 'Thirty' if @player_one.points == 2
+      p1res = @player_one.results_text
+      p2res = @player_two.results_text
       result = "#{p1res}-#{p2res}"
     end
     result = "Advantage #{@player_one.name}" if (@player_one.points > @player_two.points) && (@player_two.points >= 3)
@@ -115,9 +90,7 @@ end
 class TennisGame3 < TennisGame
   def score
     if ((@player_one.points < 4) && (@player_two.points < 4)) && (@player_one.points + @player_two.points < 6)
-      p = %w[Love Fifteen Thirty Forty]
-      s = p[@player_one.points]
-      @player_one.points == @player_two.points ? "#{s}-All" : "#{s}-#{p[@player_two.points]}"
+      @player_one.points == @player_two.points ? "#{@player_one.results_text}-All" : "#{@player_one.results_text}-#{@player_two.results_text}"
     elsif @player_one.points == @player_two.points
       'Deuce'
     else
